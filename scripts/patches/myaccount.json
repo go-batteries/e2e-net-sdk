@@ -1,0 +1,62 @@
+[
+  {
+    "method": "put",
+    "path": "/api/v1/container_registry/replication/policies/{policy_id}/",
+    "param": "policy_id",
+    "bug": "declared as 'in: query' but appears in the URL template",
+    "fix": "reclassify_to_path"
+  },
+  {
+    "method": "delete",
+    "path": "/api/v1/container_registry/replication/policies/{policy_id}/",
+    "param": "policy_id",
+    "bug": "declared as 'in: query' but appears in the URL template",
+    "fix": "reclassify_to_path"
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/sso/organizations/{organization_id}/realms/{realm_id}/clients/{client_id}/verify/",
+    "param": "client_id",
+    "bug": "appears in the URL template but is not declared as a parameter at all",
+    "fix": "add_path_param",
+    "schema": { "type": "string" }
+  },
+  {
+    "method": "delete",
+    "path": "/api/v1/storage/bucket-replication/",
+    "param": "bucket_name",
+    "bug": "declared as 'in: path' but the URL template has no {bucket_name}",
+    "fix": "reclassify_to_query"
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/rds/cluster/{Cluster_id}/graph-monitoring",
+    "param": "interval",
+    "bug": "declared as 'in: path' but the URL template has no {interval}",
+    "fix": "reclassify_to_query"
+  },
+  {
+    "method": "delete",
+    "path": "/api/v1/efs/{sfs_id}/node/{VPC_NODE_ID}/prohibit/",
+    "param": "connection_type",
+    "bug": "schema type is 'integer' but its enum values are strings (e.g. \"VPC\"), which breaks oapi-codegen's Go const generation",
+    "fix": "retype_schema",
+    "new_type": "string"
+  },
+  {
+    "method": "post",
+    "path": "/api/v1/apis/token/",
+    "param": "access_name",
+    "in_body": true,
+    "bug": "requestBody property is a oneOf of two fixed-size arrays, which triggers a self-referential type bug in oapi-codegen's Go output",
+    "fix": "simplify_body_array_enum",
+    "new_schema": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["read", "write"] },
+      "minItems": 1,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "example": ["read", "write"]
+    }
+  }
+]

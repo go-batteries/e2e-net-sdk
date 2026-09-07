@@ -1,0 +1,82 @@
+[
+  {
+    "method": "post",
+    "path": "/project/p-{Project_Id}/endpoint/is-{Endpoint_Id}/v1/chat/completions",
+    "param": "Project_Id",
+    "bug": "appears in the URL template but is not declared as a parameter at all",
+    "fix": "add_path_param",
+    "schema": { "type": "string" }
+  },
+  {
+    "method": "post",
+    "path": "/project/p-{Project_Id}/endpoint/is-{Endpoint_Id}/v1/chat/completions",
+    "param": "Endpoint_Id",
+    "bug": "appears in the URL template but is not declared as a parameter at all",
+    "fix": "add_path_param",
+    "schema": { "type": "string" }
+  },
+  {
+    "method": "post",
+    "path": "/project/p-{Project_Id}/genai/llama3_1_8b_instruct/v1/chat/completions",
+    "param": "Project_Id",
+    "bug": "appears in the URL template but is not declared as a parameter at all",
+    "fix": "add_path_param",
+    "schema": { "type": "string" }
+  },
+  {
+    "method": "post",
+    "path": "/project/p-{Project_Id}/genai/qwen3_32b/v1/chat/completions",
+    "param": "Project_Id",
+    "bug": "appears in the URL template but is not declared as a parameter at all",
+    "fix": "add_path_param",
+    "schema": { "type": "string" }
+  },
+  {
+    "method": "post",
+    "path": "/project/p-{Project_Id}/genai/gpt_oss_120b/v1/chat/completions",
+    "param": "Project_Id",
+    "bug": "appears in the URL template but is not declared as a parameter at all",
+    "fix": "add_path_param",
+    "schema": { "type": "string" }
+  },
+  {
+    "method": "post",
+    "path": "/project/p-{Project_Id}/genai/sarvam_translate/v1/chat/completions",
+    "param": "Project_Id",
+    "bug": "appears in the URL template but is not declared as a parameter at all",
+    "fix": "add_path_param",
+    "schema": { "type": "string" }
+  },
+  {
+    "method": "put",
+    "path": "/notebooks/{Instance_id}/actions/",
+    "param_index": 4,
+    "bug": "parameter schema type is 'integer' but its enum values are strings (Start/Stop/Restart/...)",
+    "fix": "retype_schema_by_index",
+    "new_type": "string"
+  },
+  {
+    "method": "put",
+    "path": "/model_evaluation/{evaluation_id}/",
+    "param_index": 4,
+    "bug": "parameter schema type is 'integer' but its enum values are strings (retry/terminate)",
+    "fix": "retype_schema_by_index",
+    "new_type": "string"
+  },
+  {
+    "method": "put",
+    "path": "/finetuning/{FineTuneID}/",
+    "param_index": 4,
+    "bug": "parameter schema type is 'integer' but its enum values are strings (retry/terminate)",
+    "fix": "retype_schema_by_index",
+    "new_type": "string"
+  },
+  {
+    "method": "get",
+    "path": "/private-cluster/{Private_Cluster_id}/nodes-info/{node_name}/",
+    "param_index": 2,
+    "bug": "parameter schema type is 'integer' but its enum values are strings (5m/1h/1d/7d/1mn)",
+    "fix": "retype_schema_by_index",
+    "new_type": "string"
+  }
+]
