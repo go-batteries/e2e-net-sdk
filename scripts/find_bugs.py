@@ -10,14 +10,29 @@ bitninja_discount_percentage). Re-run it any time you refresh
 specs/e2e.openapi.json -- after scripts/generate.sh -- to catch drift
 before it crashes a real run.
 
-Runs against your live account and costs nothing (GET-only, no resources
-created), but does need real credentials.
+Runs against your live account and costs nothing by default (GET-only,
+no resources created), but does need real credentials.
+
+Coverage gap, by design: any endpoint with a {path_param} (e.g.
+GetNodeDetails at /nodes/{node_id}/) is skipped, because there's no
+resource id to call it with short of creating one. --methods POST etc.
+does NOT lift this restriction -- it only widens which HTTP methods on
+parameter-less paths get probed. Bugs on detail/create/update endpoints
+(the zabbix_host_id_v2 and bitninja_* bugs, for instance) still have to
+be found by hand, the way they were on 2026-09-07: run a real lifecycle,
+capture the crash, add the patch. That's real infra cost -- create the
+minimum thing needed, delete it immediately after.
 
 Usage:
     E2E_API_KEY=... E2E_AUTH_TOKEN=... E2E_PROJECT_ID=58489 \
-        python3 scripts/find_bugs.py [--dry-run]
+        python3 scripts/find_bugs.py [--dry-run] [--methods GET,POST]
 
 --dry-run prints found issues without writing patches/myaccount.json.
+--methods restricts (or widens) which HTTP methods on parameter-less
+paths get probed; default is GET only, since POST/PUT/PATCH/DELETE on a
+parameter-less path is almost always a "create" or "list-all-and-mutate"
+operation with side effects. Passing e.g. --methods GET,POST calls
+those too -- know what you're calling before you do.
 """
 import json
 import os
@@ -39,25 +54,34 @@ def active_locations():
     return [loc["name"] for loc in data["locations"] if loc["status"] == "active"]
 
 
-def safe_get_candidates(spec):
-    """Every GET op with no {path param} and no required param beyond
-    project_id/location/apikey/crn -- the endpoints find_bugs.py can call
-    without needing a specific resource id it doesn't have."""
+def safe_get_candidates(spec, methods_wanted):
+    """Every op (method in methods_wanted) with no {path param} and no
+    required param beyond project_id/location/apikey/crn.
+
+    Only GET is ever actually invoked (see main()) -- non-GET methods
+    that pass this filter are listed as "not invoked" so you can see
+    what a wider --methods sweep would need a hand-written body for,
+    without this script ever calling something that creates or mutates
+    a real resource on its own judgment."""
     out = []
-    for path, methods in spec["paths"].items():
+    for path, path_methods in spec["paths"].items():
         if "{" in path:
             continue
-        op = methods.get("get")
-        if not op or "200" not in op.get("responses", {}):
-            continue
-        params = op.get("parameters", [])
-        required_extra = [
-            p["name"] for p in params
-            if p.get("required") and p["name"] not in ("project_id", "location", "apikey", "crn")
-        ]
-        if required_extra:
-            continue
-        out.append((path, op, params))
+        for method, op in path_methods.items():
+            if method.upper() not in methods_wanted:
+                continue
+            if not isinstance(op, dict):
+                continue
+            if not any(code.startswith("2") for code in op.get("responses", {})):
+                continue
+            params = op.get("parameters", [])
+            required_extra = [
+                p["name"] for p in params
+                if p.get("required") and p["name"] not in ("project_id", "location", "apikey", "crn")
+            ]
+            if required_extra:
+                continue
+            out.append((method.upper(), path, op, params))
     return out
 
 
@@ -170,20 +194,34 @@ def build_patch_entry(method, path, schema_path_str, issue, endpoint_desc):
 def main():
     dry_run = "--dry-run" in sys.argv
 
+    methods_wanted = {"GET"}
+    if "--methods" in sys.argv:
+        idx = sys.argv.index("--methods")
+        methods_wanted = {m.strip().upper() for m in sys.argv[idx + 1].split(",")}
+
     api_key = os.environ["E2E_API_KEY"]
     auth_token = os.environ["E2E_AUTH_TOKEN"]
     project_id = os.environ["E2E_PROJECT_ID"]
 
     spec = json.load(open(SPEC_PATH))
     locations = active_locations()
-    candidates = safe_get_candidates(spec)
+    candidates = safe_get_candidates(spec, methods_wanted)
 
-    print(f"sweeping {len(candidates)} endpoints x {len(locations)} locations...")
+    get_count = sum(1 for m, *_ in candidates if m == "GET")
+    other_count = len(candidates) - get_count
+    print(f"sweeping {get_count} GET endpoints x {len(locations)} locations...")
+    if other_count:
+        print(f"({other_count} non-GET endpoint(s) matched --methods but are only listed, never invoked -- see below)")
 
     new_entries = []
     seen_schema_paths = set()
+    not_invoked = []
 
-    for path, op, params in candidates:
+    for method, path, op, params in candidates:
+        if method != "GET":
+            not_invoked.append((method, path))
+            continue
+
         needs_location = any(p["name"] == "location" for p in params)
         locs = locations if needs_location else [locations[0]]
         schema = op["responses"]["200"]["content"]["application/json"]["schema"]
@@ -206,6 +244,14 @@ def main():
                 seen_schema_paths.add(key)
                 print(f"        {schema_path_str}  {issue['bug_kind']}  value={issue['value']!r}")
                 new_entries.append(build_patch_entry("get", path, schema_path_str, issue, path))
+
+    if not_invoked:
+        print()
+        print(f"=== {len(not_invoked)} non-GET endpoint(s) matched --methods but were NOT called ===")
+        print("(no request body can be inferred safely -- probe these by hand, same as the")
+        print(" node-lifecycle bugs, and add patches for whatever crashes)")
+        for method, path in not_invoked:
+            print(f"  {method:6} {path}")
 
     print()
     print(f"=== {len(new_entries)} new patch entries ===")
