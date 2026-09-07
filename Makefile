@@ -46,3 +46,8 @@ tidy:
 .PHONY: list-modules
 list-modules:
 	@for m in $(MODULES); do echo $$m; done
+
+.PHONY: hooks
+hooks:
+	git config core.hooksPath scripts/hooks
+	@echo "commit-msg hook installed (Conventional Commits enforced locally)"

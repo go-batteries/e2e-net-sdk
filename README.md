@@ -94,6 +94,17 @@ make all         # all of the above
 make list-modules
 ```
 
+## Commit messages
+
+[Conventional Commits](https://www.conventionalcommits.org/): `<type>(<scope>): <description>`,
+type one of `feat fix docs style refactor perf test build ci chore revert`.
+
+```
+make hooks   # installs a local commit-msg hook that rejects non-conforming messages
+```
+
+Enforced in CI either way (`.github/workflows/commitlint.yml`), on every push and PR to `main`.
+
 ## Status
 
 CI (`.github/workflows/ci.yml`) runs `fmt-check`, `vet`, `lint`, `build` on every

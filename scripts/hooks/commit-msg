@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Rejects commit messages that don't follow Conventional Commits.
+# Installed via: git config core.hooksPath scripts/hooks
+set -euo pipefail
+
+msg_file="$1"
+here="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+"$here/check_commit_msg.sh" "$(cat "$msg_file")"

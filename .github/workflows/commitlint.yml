@@ -1,0 +1,39 @@
+name: Commit messages
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Conventional Commits format
+        run: |
+          set -euo pipefail
+          chmod +x scripts/check_commit_msg.sh
+
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            range="origin/${{ github.event.pull_request.base.ref }}..HEAD"
+          else
+            # push to main: check just the commits in this push
+            range="${{ github.event.before }}..${{ github.sha }}"
+          fi
+
+          fail=0
+          while read -r sha; do
+            [ -z "$sha" ] && continue
+            msg=$(git log -1 --format=%B "$sha")
+            echo "-- $sha --"
+            if ! ./scripts/check_commit_msg.sh "$msg"; then
+              fail=1
+            fi
+          done < <(git rev-list "$range" 2>/dev/null || git rev-list HEAD -1)
+
+          exit $fail
