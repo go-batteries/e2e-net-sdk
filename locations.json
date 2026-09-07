@@ -1,0 +1,11 @@
+{
+  "locations": [
+    { "name": "Delhi", "status": "active" },
+    { "name": "Chennai", "status": "active" },
+    {
+      "name": "Mumbai",
+      "status": "discontinued",
+      "note": "Present in E2E's own parameter descriptions as an explicit callout (\"Mumbai region has been discontinued\"), not as a live enum value. Kept here so nothing surprises you Googling old E2E docs/blog posts that still mention it."
+    }
+  ]
+}

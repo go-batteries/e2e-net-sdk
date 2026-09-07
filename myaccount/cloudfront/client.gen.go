@@ -12,7 +12,6 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-	"time"
 
 	"github.com/oapi-codegen/runtime"
 	openapi_types "github.com/oapi-codegen/runtime/types"
@@ -1234,7 +1233,7 @@ type GetCdnDistributionsResponse struct {
 		Code *int `json:"code,omitempty"`
 		Data *[]struct {
 			// CreatedAt Example: 30/Oct/2024 12:48 PM
-			CreatedAt *time.Time `json:"created_at,omitempty"`
+			CreatedAt *string `json:"created_at,omitempty"`
 
 			// DomainId Example: ENZYVCZPO9X4L
 			DomainId *string `json:"domain_id,omitempty"`
@@ -1269,7 +1268,7 @@ func (r GetCdnDistributionsResponse) GetJSON200() *struct {
 	Code *int `json:"code,omitempty"`
 	Data *[]struct {
 		// CreatedAt Example: 30/Oct/2024 12:48 PM
-		CreatedAt *time.Time `json:"created_at,omitempty"`
+		CreatedAt *string `json:"created_at,omitempty"`
 
 		// DomainId Example: ENZYVCZPO9X4L
 		DomainId *string `json:"domain_id,omitempty"`
@@ -1774,7 +1773,7 @@ func ParseGetCdnDistributionsResponse(rsp *http.Response) (*GetCdnDistributionsR
 			Code *int `json:"code,omitempty"`
 			Data *[]struct {
 				// CreatedAt Example: 30/Oct/2024 12:48 PM
-				CreatedAt *time.Time `json:"created_at,omitempty"`
+				CreatedAt *string `json:"created_at,omitempty"`
 
 				// DomainId Example: ENZYVCZPO9X4L
 				DomainId *string `json:"domain_id,omitempty"`

@@ -18528,12 +18528,12 @@ type OsPlansResponse struct {
 			// BitninjaDiscountPercentage Discount percentage applied to the BitNinja plan
 			//
 			// Example: 0
-			BitninjaDiscountPercentage *int `json:"bitninja_discount_percentage,omitempty"`
+			BitninjaDiscountPercentage *float32 `json:"bitninja_discount_percentage,omitempty"`
 			CanSupportBitninja         *struct {
 				// BitninjaCost Cost associated with BitNinja support for the plan
 				//
 				// Example: 760
-				BitninjaCost *int `json:"bitninja_cost,omitempty"`
+				BitninjaCost *float32 `json:"bitninja_cost,omitempty"`
 
 				// ShowBitninja Indicates whether the BitNinja support option is shown
 				//
@@ -18686,7 +18686,7 @@ type OsPlansResponse struct {
 				// MinimumBillingAmount Minimum billing amount for the OS plan
 				//
 				// Example: 0
-				MinimumBillingAmount *int `json:"minimum_billing_amount,omitempty"`
+				MinimumBillingAmount *float32 `json:"minimum_billing_amount,omitempty"`
 
 				// PricePerHour Hourly price of the OS plan
 				//
@@ -18696,7 +18696,7 @@ type OsPlansResponse struct {
 				// PricePerMonth Monthly price of the OS plan in cents
 				//
 				// Example: 2263
-				PricePerMonth *int `json:"price_per_month,omitempty"`
+				PricePerMonth *float32 `json:"price_per_month,omitempty"`
 
 				// Ram Amount of RAM in gigabytes
 				//
@@ -18738,12 +18738,12 @@ func (r OsPlansResponse) GetJSON200() *struct {
 		// BitninjaDiscountPercentage Discount percentage applied to the BitNinja plan
 		//
 		// Example: 0
-		BitninjaDiscountPercentage *int `json:"bitninja_discount_percentage,omitempty"`
+		BitninjaDiscountPercentage *float32 `json:"bitninja_discount_percentage,omitempty"`
 		CanSupportBitninja         *struct {
 			// BitninjaCost Cost associated with BitNinja support for the plan
 			//
 			// Example: 760
-			BitninjaCost *int `json:"bitninja_cost,omitempty"`
+			BitninjaCost *float32 `json:"bitninja_cost,omitempty"`
 
 			// ShowBitninja Indicates whether the BitNinja support option is shown
 			//
@@ -18896,7 +18896,7 @@ func (r OsPlansResponse) GetJSON200() *struct {
 			// MinimumBillingAmount Minimum billing amount for the OS plan
 			//
 			// Example: 0
-			MinimumBillingAmount *int `json:"minimum_billing_amount,omitempty"`
+			MinimumBillingAmount *float32 `json:"minimum_billing_amount,omitempty"`
 
 			// PricePerHour Hourly price of the OS plan
 			//
@@ -18906,7 +18906,7 @@ func (r OsPlansResponse) GetJSON200() *struct {
 			// PricePerMonth Monthly price of the OS plan in cents
 			//
 			// Example: 2263
-			PricePerMonth *int `json:"price_per_month,omitempty"`
+			PricePerMonth *float32 `json:"price_per_month,omitempty"`
 
 			// Ram Amount of RAM in gigabytes
 			//
@@ -19219,7 +19219,7 @@ type GetImagesSavedImagesResponse struct {
 			CloningOps *string `json:"cloning_ops,omitempty"`
 
 			// CreationTime Example: 11-09-2024 18:03:37
-			CreationTime *time.Time `json:"creation_time,omitempty"`
+			CreationTime *string `json:"creation_time,omitempty"`
 
 			// Distro Example: CentOS-Stream
 			Distro *string `json:"distro,omitempty"`
@@ -19273,7 +19273,7 @@ func (r GetImagesSavedImagesResponse) GetJSON200() *struct {
 		CloningOps *string `json:"cloning_ops,omitempty"`
 
 		// CreationTime Example: 11-09-2024 18:03:37
-		CreationTime *time.Time `json:"creation_time,omitempty"`
+		CreationTime *string `json:"creation_time,omitempty"`
 
 		// Distro Example: CentOS-Stream
 		Distro *string `json:"distro,omitempty"`
@@ -19424,7 +19424,7 @@ type AsPlanResponse struct {
 					PricePerHour *float32 `json:"price_per_hour,omitempty"`
 
 					// PricePerMonth Example: 2263
-					PricePerMonth *int `json:"price_per_month,omitempty"`
+					PricePerMonth *float32 `json:"price_per_month,omitempty"`
 
 					// Ram Example: 8.00
 					Ram *string `json:"ram,omitempty"`
@@ -19523,7 +19523,7 @@ func (r AsPlanResponse) GetJSON200() *struct {
 				PricePerHour *float32 `json:"price_per_hour,omitempty"`
 
 				// PricePerMonth Example: 2263
-				PricePerMonth *int `json:"price_per_month,omitempty"`
+				PricePerMonth *float32 `json:"price_per_month,omitempty"`
 
 				// Ram Example: 8.00
 				Ram *string `json:"ram,omitempty"`
@@ -20027,7 +20027,7 @@ type CreateCommittedResponse struct {
 				// BitninjaDiscountPercentage Discount percentage applied by BitNinja
 				//
 				// Example: 0
-				BitninjaDiscountPercentage *int `json:"bitninja_discount_percentage,omitempty"`
+				BitninjaDiscountPercentage *float32 `json:"bitninja_discount_percentage,omitempty"`
 
 				// CdpTabEnabled Indicates whether the CDP tab is enabled for the created node.
 				//
@@ -20052,7 +20052,7 @@ type CreateCommittedResponse struct {
 					// BitninjaCost BitNinja enablement cost
 					//
 					// Example: 123
-					BitninjaCost *int `json:"bitninja_cost,omitempty"`
+					BitninjaCost *float32 `json:"bitninja_cost,omitempty"`
 
 					// ShowBitninja Indicates whether BitNinja details should be shown
 					//
@@ -20222,7 +20222,7 @@ type CreateCommittedResponse struct {
 					// Label Label identifying the SSH key
 					//
 					// Example: your_email@example.com
-					Label *openapi_types.Email `json:"label,omitempty"`
+					Label *string `json:"label,omitempty"`
 
 					// SshKey SSH public key string
 					//
@@ -20348,7 +20348,7 @@ func (r CreateCommittedResponse) GetJSON200() *struct {
 			// BitninjaDiscountPercentage Discount percentage applied by BitNinja
 			//
 			// Example: 0
-			BitninjaDiscountPercentage *int `json:"bitninja_discount_percentage,omitempty"`
+			BitninjaDiscountPercentage *float32 `json:"bitninja_discount_percentage,omitempty"`
 
 			// CdpTabEnabled Indicates whether the CDP tab is enabled for the created node.
 			//
@@ -20373,7 +20373,7 @@ func (r CreateCommittedResponse) GetJSON200() *struct {
 				// BitninjaCost BitNinja enablement cost
 				//
 				// Example: 123
-				BitninjaCost *int `json:"bitninja_cost,omitempty"`
+				BitninjaCost *float32 `json:"bitninja_cost,omitempty"`
 
 				// ShowBitninja Indicates whether BitNinja details should be shown
 				//
@@ -20543,7 +20543,7 @@ func (r CreateCommittedResponse) GetJSON200() *struct {
 				// Label Label identifying the SSH key
 				//
 				// Example: your_email@example.com
-				Label *openapi_types.Email `json:"label,omitempty"`
+				Label *string `json:"label,omitempty"`
 
 				// SshKey SSH public key string
 				//
@@ -21694,7 +21694,7 @@ type GetNodeDetailsResponse struct {
 				// Label Label identifying the SSH key
 				//
 				// Example: your_email@example.com
-				Label *openapi_types.Email `json:"label,omitempty"`
+				Label *string `json:"label,omitempty"`
 
 				// SshKey SSH public key string associated with the node
 				//
@@ -21738,7 +21738,7 @@ type GetNodeDetailsResponse struct {
 			ZabbixHostId *string `json:"zabbix_host_id,omitempty"`
 
 			// ZabbixHostIdV2 Zabbix host identifier for the node
-			ZabbixHostIdV2 *string `json:"zabbix_host_id_v2,omitempty"`
+			ZabbixHostIdV2 *int `json:"zabbix_host_id_v2,omitempty"`
 		} `json:"data,omitempty"`
 		Errors *map[string]interface{} `json:"errors,omitempty"`
 
@@ -21984,7 +21984,7 @@ func (r GetNodeDetailsResponse) GetJSON200() *struct {
 			// Label Label identifying the SSH key
 			//
 			// Example: your_email@example.com
-			Label *openapi_types.Email `json:"label,omitempty"`
+			Label *string `json:"label,omitempty"`
 
 			// SshKey SSH public key string associated with the node
 			//
@@ -22028,7 +22028,7 @@ func (r GetNodeDetailsResponse) GetJSON200() *struct {
 		ZabbixHostId *string `json:"zabbix_host_id,omitempty"`
 
 		// ZabbixHostIdV2 Zabbix host identifier for the node
-		ZabbixHostIdV2 *string `json:"zabbix_host_id_v2,omitempty"`
+		ZabbixHostIdV2 *int `json:"zabbix_host_id_v2,omitempty"`
 	} `json:"data,omitempty"`
 	Errors *map[string]interface{} `json:"errors,omitempty"`
 
@@ -27212,7 +27212,7 @@ type GetSshKeysResponse struct {
 			SshKey *string `json:"ssh_key,omitempty"`
 
 			// Timestamp Example: 19-Feb-2025
-			Timestamp *openapi_types.Date `json:"timestamp,omitempty"`
+			Timestamp *string `json:"timestamp,omitempty"`
 		} `json:"data,omitempty"`
 
 		// Errors Example: {}
@@ -27241,7 +27241,7 @@ func (r GetSshKeysResponse) GetJSON200() *struct {
 		SshKey *string `json:"ssh_key,omitempty"`
 
 		// Timestamp Example: 19-Feb-2025
-		Timestamp *openapi_types.Date `json:"timestamp,omitempty"`
+		Timestamp *string `json:"timestamp,omitempty"`
 	} `json:"data,omitempty"`
 
 	// Errors Example: {}
@@ -32770,12 +32770,12 @@ func ParseOsPlansResponse(rsp *http.Response) (*OsPlansResponse, error) {
 				// BitninjaDiscountPercentage Discount percentage applied to the BitNinja plan
 				//
 				// Example: 0
-				BitninjaDiscountPercentage *int `json:"bitninja_discount_percentage,omitempty"`
+				BitninjaDiscountPercentage *float32 `json:"bitninja_discount_percentage,omitempty"`
 				CanSupportBitninja         *struct {
 					// BitninjaCost Cost associated with BitNinja support for the plan
 					//
 					// Example: 760
-					BitninjaCost *int `json:"bitninja_cost,omitempty"`
+					BitninjaCost *float32 `json:"bitninja_cost,omitempty"`
 
 					// ShowBitninja Indicates whether the BitNinja support option is shown
 					//
@@ -32928,7 +32928,7 @@ func ParseOsPlansResponse(rsp *http.Response) (*OsPlansResponse, error) {
 					// MinimumBillingAmount Minimum billing amount for the OS plan
 					//
 					// Example: 0
-					MinimumBillingAmount *int `json:"minimum_billing_amount,omitempty"`
+					MinimumBillingAmount *float32 `json:"minimum_billing_amount,omitempty"`
 
 					// PricePerHour Hourly price of the OS plan
 					//
@@ -32938,7 +32938,7 @@ func ParseOsPlansResponse(rsp *http.Response) (*OsPlansResponse, error) {
 					// PricePerMonth Monthly price of the OS plan in cents
 					//
 					// Example: 2263
-					PricePerMonth *int `json:"price_per_month,omitempty"`
+					PricePerMonth *float32 `json:"price_per_month,omitempty"`
 
 					// Ram Amount of RAM in gigabytes
 					//
@@ -33128,7 +33128,7 @@ func ParseGetImagesSavedImagesResponse(rsp *http.Response) (*GetImagesSavedImage
 				CloningOps *string `json:"cloning_ops,omitempty"`
 
 				// CreationTime Example: 11-09-2024 18:03:37
-				CreationTime *time.Time `json:"creation_time,omitempty"`
+				CreationTime *string `json:"creation_time,omitempty"`
 
 				// Distro Example: CentOS-Stream
 				Distro *string `json:"distro,omitempty"`
@@ -33268,7 +33268,7 @@ func ParseAsPlanResponse(rsp *http.Response) (*AsPlanResponse, error) {
 						PricePerHour *float32 `json:"price_per_hour,omitempty"`
 
 						// PricePerMonth Example: 2263
-						PricePerMonth *int `json:"price_per_month,omitempty"`
+						PricePerMonth *float32 `json:"price_per_month,omitempty"`
 
 						// Ram Example: 8.00
 						Ram *string `json:"ram,omitempty"`
@@ -33594,7 +33594,7 @@ func ParseCreateCommittedResponse(rsp *http.Response) (*CreateCommittedResponse,
 					// BitninjaDiscountPercentage Discount percentage applied by BitNinja
 					//
 					// Example: 0
-					BitninjaDiscountPercentage *int `json:"bitninja_discount_percentage,omitempty"`
+					BitninjaDiscountPercentage *float32 `json:"bitninja_discount_percentage,omitempty"`
 
 					// CdpTabEnabled Indicates whether the CDP tab is enabled for the created node.
 					//
@@ -33619,7 +33619,7 @@ func ParseCreateCommittedResponse(rsp *http.Response) (*CreateCommittedResponse,
 						// BitninjaCost BitNinja enablement cost
 						//
 						// Example: 123
-						BitninjaCost *int `json:"bitninja_cost,omitempty"`
+						BitninjaCost *float32 `json:"bitninja_cost,omitempty"`
 
 						// ShowBitninja Indicates whether BitNinja details should be shown
 						//
@@ -33789,7 +33789,7 @@ func ParseCreateCommittedResponse(rsp *http.Response) (*CreateCommittedResponse,
 						// Label Label identifying the SSH key
 						//
 						// Example: your_email@example.com
-						Label *openapi_types.Email `json:"label,omitempty"`
+						Label *string `json:"label,omitempty"`
 
 						// SshKey SSH public key string
 						//
@@ -34561,7 +34561,7 @@ func ParseGetNodeDetailsResponse(rsp *http.Response) (*GetNodeDetailsResponse, e
 					// Label Label identifying the SSH key
 					//
 					// Example: your_email@example.com
-					Label *openapi_types.Email `json:"label,omitempty"`
+					Label *string `json:"label,omitempty"`
 
 					// SshKey SSH public key string associated with the node
 					//
@@ -34605,7 +34605,7 @@ func ParseGetNodeDetailsResponse(rsp *http.Response) (*GetNodeDetailsResponse, e
 				ZabbixHostId *string `json:"zabbix_host_id,omitempty"`
 
 				// ZabbixHostIdV2 Zabbix host identifier for the node
-				ZabbixHostIdV2 *string `json:"zabbix_host_id_v2,omitempty"`
+				ZabbixHostIdV2 *int `json:"zabbix_host_id_v2,omitempty"`
 			} `json:"data,omitempty"`
 			Errors *map[string]interface{} `json:"errors,omitempty"`
 
@@ -37503,7 +37503,7 @@ func ParseGetSshKeysResponse(rsp *http.Response) (*GetSshKeysResponse, error) {
 				SshKey *string `json:"ssh_key,omitempty"`
 
 				// Timestamp Example: 19-Feb-2025
-				Timestamp *openapi_types.Date `json:"timestamp,omitempty"`
+				Timestamp *string `json:"timestamp,omitempty"`
 			} `json:"data,omitempty"`
 
 			// Errors Example: {}

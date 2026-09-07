@@ -1,0 +1,26 @@
+# Canonical list of E2E MyAccount regions.
+#
+# There is no "list regions" API endpoint -- every location-scoped operation
+# across every module (ec2, s3, rds, efs, ...) declares the same closed
+# `location` enum inline in its own OpenAPI parameter instead of referencing
+# a shared list. This file is that list, extracted by hand from those enums
+# and cross-checked across modules (see scripts/check_locations.py).
+#
+# Confirmed present in: myaccount/ec2, myaccount/s3, myaccount/rds,
+# myaccount/efs (and by inspection, consistent everywhere else that takes
+# a `location` parameter).
+#
+# Update this file, not code, when E2E adds or removes a region -- then run
+# scripts/check_locations.py to verify it still matches the specs in specs/.
+locations:
+  - name: Delhi
+    status: active
+  - name: Chennai
+    status: active
+  - name: Mumbai
+    status: discontinued
+    note: >
+      Present in E2E's own parameter descriptions as an explicit callout
+      ("Mumbai region has been discontinued"), not as a live enum value.
+      Kept here so nothing surprises you Googling old E2E docs/blog posts
+      that still mention it.

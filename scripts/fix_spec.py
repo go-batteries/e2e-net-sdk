@@ -64,6 +64,30 @@ def apply_patch(spec, patch):
         body_schema["properties"][patch["param"]] = patch["new_schema"]
         return
 
+    if fix == "set_response_field_type":
+        # Same schema_path walk as drop_response_field_format, but sets
+        # "type" outright. Used where the declared type is simply wrong for
+        # what the live API returns (e.g. "integer" for a field that comes
+        # back as a JSON float like 0.0), not just missing/wrong "format".
+        node = op["responses"][patch["status"]]["content"][patch["media_type"]]["schema"]
+        for key in patch["schema_path"]:
+            node = node[key]
+        node["type"] = patch["new_type"]
+        return
+
+    if fix == "drop_response_field_format":
+        # Walk op["responses"][status]["content"][media]["schema"] then
+        # patch["schema_path"] (a list of dict/list keys) to the field,
+        # and delete its "format". Used where E2E's declared format
+        # (e.g. "date") doesn't match what the live API actually returns
+        # (e.g. "07-Sep-2026" isn't a valid RFC 3339 date), which breaks
+        # strict typed parsing in generated clients.
+        node = op["responses"][patch["status"]]["content"][patch["media_type"]]["schema"]
+        for key in patch["schema_path"]:
+            node = node[key]
+        node.pop("format", None)
+        return
+
     raise ValueError(f"unknown fix type: {fix}")
 
 

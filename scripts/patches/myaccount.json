@@ -58,5 +58,180 @@
       "uniqueItems": true,
       "example": ["read", "write"]
     }
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/ssh_keys/",
+    "bug": "response field 'timestamp' is declared 'format: date' (RFC 3339, e.g. 2025-02-19) but the live API actually returns 'DD-Mon-YYYY' (e.g. \"19-Feb-2025\", matching the spec's own example) -- confirmed live, this crashes JSON unmarshalling in generated code with 'cannot parse ... as \"2006\"'",
+    "fix": "drop_response_field_format",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "items", "properties", "timestamp"]
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/images/saved-images/",
+    "bug": "response field 'creation_time' is declared 'format: date-time' (RFC 3339) but its own example ('11-09-2024 18:03:37') is not RFC 3339",
+    "fix": "drop_response_field_format",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "items", "properties", "creation_time"]
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/cdn/distributions/",
+    "bug": "response field 'created_at' is declared 'format: date-time' (RFC 3339) but its own example ('30/Oct/2024 12:48 PM') is not RFC 3339",
+    "fix": "drop_response_field_format",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "items", "properties", "created_at"]
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/images/",
+    "bug": "response field 'specs.price_per_month' is declared 'integer' but the live API returns a JSON float (0.0) for plans with no monthly price -- confirmed live, crashed JSON unmarshalling with 'cannot unmarshal number 0.0 into ... type int'",
+    "fix": "set_response_field_type",
+    "new_type": "number",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "items", "properties", "specs", "properties", "price_per_month"]
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/images/upgradeimage/{vm_template_id}/",
+    "bug": "same 'specs.price_per_month' field, same backend, as the confirmed bug on GET /api/v1/images/ -- fixed preemptively for consistency",
+    "fix": "set_response_field_type",
+    "new_type": "number",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "properties", "data", "items", "properties", "specs", "properties", "price_per_month"]
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/images/",
+    "bug": "response field 'bitninja_discount_percentage' is declared 'integer' but the live API returns a JSON float (0.0) -- confirmed against 2043 live entries across both regions",
+    "fix": "set_response_field_type",
+    "new_type": "number",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "items", "properties", "bitninja_discount_percentage"]
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/images/",
+    "bug": "response field 'can_support_bitninja.bitninja_cost' is declared 'integer' but the live API returns a JSON float -- confirmed against 2043 live entries across both regions",
+    "fix": "set_response_field_type",
+    "new_type": "number",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "items", "properties", "can_support_bitninja", "properties", "bitninja_cost"]
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/images/",
+    "bug": "response field 'specs.minimum_billing_amount' is declared 'integer' but the live API returns a JSON float -- confirmed against 2043 live entries across both regions",
+    "fix": "set_response_field_type",
+    "new_type": "number",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "items", "properties", "specs", "properties", "minimum_billing_amount"]
+  },
+  {
+    "method": "post",
+    "path": "/api/v1/nodes/",
+    "bug": "response field 'data.node_create_response[].enable_bitninja_details.bitninja_cost' is declared 'integer' but the live API returns a JSON float (760.0) -- confirmed live, crashed unmarshalling the CreateCommitted response after node creation had already succeeded (node 344284, 2026-09-07)",
+    "fix": "set_response_field_type",
+    "new_type": "number",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "properties", "node_create_response", "items", "properties", "enable_bitninja_details", "properties", "bitninja_cost"]
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/appliance-type/",
+    "bug": "same 'bitninja_cost' field, same backend, as the confirmed bugs on /api/v1/nodes/ and /api/v1/images/ -- fixed preemptively for consistency",
+    "fix": "set_response_field_type",
+    "new_type": "number",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "items", "properties", "appliance_config", "items", "properties", "can_support_bitninja", "properties", "bitninja_cost"]
+  },
+  {
+    "method": "post",
+    "path": "/api/v1/nodes/",
+    "bug": "response field 'data.node_create_response[].ssh_keys[].label' is declared 'format: email' (its spec example, 'your_email@example.com', happens to look like an email since SSH key comments often are) but a real label like \"alexday\" fails oapi-codegen's runtime email regex validation on unmarshal -- confirmed live, crashed CreateCommittedWithBodyWithResponse's error path with 'email: failed to pass regex validation' after node creation had already succeeded",
+    "fix": "drop_response_field_format",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "properties", "node_create_response", "items", "properties", "ssh_keys", "items", "properties", "label"]
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/nodes/{node_id}/",
+    "bug": "same 'ssh_keys[].label' field, same bogus 'format: email', on GetNodeDetails -- this one would break polling (waitForRunning calls GetNodeDetails repeatedly), fixed preemptively before it crashed a run",
+    "fix": "drop_response_field_format",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "properties", "ssh_keys", "items", "properties", "label"]
+  },
+  {
+    "method": "post",
+    "path": "/api/v1/nodes/",
+    "bug": "response field 'data.node_create_response[].bitninja_discount_percentage' is declared 'integer' but the live API returns a JSON float (0.0) -- confirmed live, crashed CreateCommittedWithBodyWithResponse's error path after node creation had already succeeded (node 344291, 2026-09-07). Same backend/pattern as the sibling bitninja_cost field already patched above.",
+    "fix": "set_response_field_type",
+    "new_type": "number",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "properties", "node_create_response", "items", "properties", "bitninja_discount_percentage"]
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/appliance-type/",
+    "bug": "response field 'data[].appliance_config[].price' is declared 'integer' but the live API returns a JSON float -- confirmed live via a full read-only sweep of every safe GET endpoint (2026-09-07)",
+    "fix": "set_response_field_type",
+    "new_type": "number",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "items", "properties", "appliance_config", "items", "properties", "price"]
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/appliance-type/",
+    "bug": "response field 'data[].appliance_config[].hourly' is declared 'integer' but the live API returns a JSON float -- confirmed live via a full read-only sweep of every safe GET endpoint (2026-09-07)",
+    "fix": "set_response_field_type",
+    "new_type": "number",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "items", "properties", "appliance_config", "items", "properties", "hourly"]
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/appliance-type/",
+    "bug": "response field 'data[].appliance_config[].committed_sku[].committed_sku_price' is declared 'integer' but the live API returns a JSON float -- confirmed live via a full read-only sweep of every safe GET endpoint (2026-09-07)",
+    "fix": "set_response_field_type",
+    "new_type": "number",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "items", "properties", "appliance_config", "items", "properties", "committed_sku", "items", "properties", "committed_sku_price"]
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/appliance-type/",
+    "bug": "response field 'data[].storage_price' is declared 'integer' but the live API returns a JSON float -- confirmed live via a full read-only sweep of every safe GET endpoint (2026-09-07)",
+    "fix": "set_response_field_type",
+    "new_type": "number",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "items", "properties", "storage_price"]
+  },
+  {
+    "method": "get",
+    "path": "/api/v1/nodes/{node_id}/",
+    "bug": "response field 'data.zabbix_host_id_v2' is declared 'string' but the live API returns a JSON number (e.g. 35210) or null -- confirmed live, crashed waitForRunning's GetNodeDetails polling loop with 'cannot unmarshal number into ... type string' (node 344293, 2026-09-07)",
+    "fix": "set_response_field_type",
+    "new_type": "integer",
+    "status": "200",
+    "media_type": "application/json",
+    "schema_path": ["properties", "data", "properties", "zabbix_host_id_v2"]
   }
 ]

@@ -4,3 +4,5 @@ scripts/*.pyc
 example/*/lifecycle
 example/*/main
 !example/*/main.go
+.env
+example/*/.env

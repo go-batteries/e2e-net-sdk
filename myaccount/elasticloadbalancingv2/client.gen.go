@@ -3308,7 +3308,7 @@ type LbPlansResponse struct {
 				AvailableInventoryStatus *bool `json:"available_inventory_status,omitempty"`
 				CanSupportBitninja       *struct {
 					// BitninjaCost Example: 760
-					BitninjaCost *int `json:"bitninja_cost,omitempty"`
+					BitninjaCost *float32 `json:"bitninja_cost,omitempty"`
 
 					// ShowBitninja Example: true
 					ShowBitninja *bool `json:"show_bitninja,omitempty"`
@@ -3326,7 +3326,7 @@ type LbPlansResponse struct {
 					CommittedSkuName *string `json:"committed_sku_name,omitempty"`
 
 					// CommittedSkuPrice Example: 15768
-					CommittedSkuPrice *int `json:"committed_sku_price,omitempty"`
+					CommittedSkuPrice *float32 `json:"committed_sku_price,omitempty"`
 
 					// CommittedUptoDate Example: 08-June-2027 09:13
 					CommittedUptoDate *string `json:"committed_upto_date,omitempty"`
@@ -3343,7 +3343,7 @@ type LbPlansResponse struct {
 				// Hourly Hourly price (INR).
 				//
 				// Example: 2
-				Hourly *int `json:"hourly,omitempty"`
+				Hourly *float32 `json:"hourly,omitempty"`
 				Iops   *struct {
 					// READIOPSSEC Example: 3000
 					READIOPSSEC *string `json:"READ_IOPS_SEC,omitempty"`
@@ -3371,7 +3371,7 @@ type LbPlansResponse struct {
 				// Price Monthly price (INR).
 				//
 				// Example: 1460
-				Price *int `json:"price,omitempty"`
+				Price *float32 `json:"price,omitempty"`
 
 				// Ram RAM in GB.
 				//
@@ -3391,7 +3391,7 @@ type LbPlansResponse struct {
 			IsPrivateClusterUser *bool `json:"is_private_cluster_user,omitempty"`
 
 			// StoragePrice Example: 5
-			StoragePrice *int `json:"storage_price,omitempty"`
+			StoragePrice *float32 `json:"storage_price,omitempty"`
 		} `json:"data,omitempty"`
 		Errors *map[string]interface{} `json:"errors,omitempty"`
 
@@ -3413,7 +3413,7 @@ func (r LbPlansResponse) GetJSON200() *struct {
 			AvailableInventoryStatus *bool `json:"available_inventory_status,omitempty"`
 			CanSupportBitninja       *struct {
 				// BitninjaCost Example: 760
-				BitninjaCost *int `json:"bitninja_cost,omitempty"`
+				BitninjaCost *float32 `json:"bitninja_cost,omitempty"`
 
 				// ShowBitninja Example: true
 				ShowBitninja *bool `json:"show_bitninja,omitempty"`
@@ -3431,7 +3431,7 @@ func (r LbPlansResponse) GetJSON200() *struct {
 				CommittedSkuName *string `json:"committed_sku_name,omitempty"`
 
 				// CommittedSkuPrice Example: 15768
-				CommittedSkuPrice *int `json:"committed_sku_price,omitempty"`
+				CommittedSkuPrice *float32 `json:"committed_sku_price,omitempty"`
 
 				// CommittedUptoDate Example: 08-June-2027 09:13
 				CommittedUptoDate *string `json:"committed_upto_date,omitempty"`
@@ -3448,7 +3448,7 @@ func (r LbPlansResponse) GetJSON200() *struct {
 			// Hourly Hourly price (INR).
 			//
 			// Example: 2
-			Hourly *int `json:"hourly,omitempty"`
+			Hourly *float32 `json:"hourly,omitempty"`
 			Iops   *struct {
 				// READIOPSSEC Example: 3000
 				READIOPSSEC *string `json:"READ_IOPS_SEC,omitempty"`
@@ -3476,7 +3476,7 @@ func (r LbPlansResponse) GetJSON200() *struct {
 			// Price Monthly price (INR).
 			//
 			// Example: 1460
-			Price *int `json:"price,omitempty"`
+			Price *float32 `json:"price,omitempty"`
 
 			// Ram RAM in GB.
 			//
@@ -3496,7 +3496,7 @@ func (r LbPlansResponse) GetJSON200() *struct {
 		IsPrivateClusterUser *bool `json:"is_private_cluster_user,omitempty"`
 
 		// StoragePrice Example: 5
-		StoragePrice *int `json:"storage_price,omitempty"`
+		StoragePrice *float32 `json:"storage_price,omitempty"`
 	} `json:"data,omitempty"`
 	Errors *map[string]interface{} `json:"errors,omitempty"`
 
@@ -5362,7 +5362,7 @@ func ParseLbPlansResponse(rsp *http.Response) (*LbPlansResponse, error) {
 					AvailableInventoryStatus *bool `json:"available_inventory_status,omitempty"`
 					CanSupportBitninja       *struct {
 						// BitninjaCost Example: 760
-						BitninjaCost *int `json:"bitninja_cost,omitempty"`
+						BitninjaCost *float32 `json:"bitninja_cost,omitempty"`
 
 						// ShowBitninja Example: true
 						ShowBitninja *bool `json:"show_bitninja,omitempty"`
@@ -5380,7 +5380,7 @@ func ParseLbPlansResponse(rsp *http.Response) (*LbPlansResponse, error) {
 						CommittedSkuName *string `json:"committed_sku_name,omitempty"`
 
 						// CommittedSkuPrice Example: 15768
-						CommittedSkuPrice *int `json:"committed_sku_price,omitempty"`
+						CommittedSkuPrice *float32 `json:"committed_sku_price,omitempty"`
 
 						// CommittedUptoDate Example: 08-June-2027 09:13
 						CommittedUptoDate *string `json:"committed_upto_date,omitempty"`
@@ -5397,7 +5397,7 @@ func ParseLbPlansResponse(rsp *http.Response) (*LbPlansResponse, error) {
 					// Hourly Hourly price (INR).
 					//
 					// Example: 2
-					Hourly *int `json:"hourly,omitempty"`
+					Hourly *float32 `json:"hourly,omitempty"`
 					Iops   *struct {
 						// READIOPSSEC Example: 3000
 						READIOPSSEC *string `json:"READ_IOPS_SEC,omitempty"`
@@ -5425,7 +5425,7 @@ func ParseLbPlansResponse(rsp *http.Response) (*LbPlansResponse, error) {
 					// Price Monthly price (INR).
 					//
 					// Example: 1460
-					Price *int `json:"price,omitempty"`
+					Price *float32 `json:"price,omitempty"`
 
 					// Ram RAM in GB.
 					//
@@ -5445,7 +5445,7 @@ func ParseLbPlansResponse(rsp *http.Response) (*LbPlansResponse, error) {
 				IsPrivateClusterUser *bool `json:"is_private_cluster_user,omitempty"`
 
 				// StoragePrice Example: 5
-				StoragePrice *int `json:"storage_price,omitempty"`
+				StoragePrice *float32 `json:"storage_price,omitempty"`
 			} `json:"data,omitempty"`
 			Errors *map[string]interface{} `json:"errors,omitempty"`
 
