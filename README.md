@@ -21,6 +21,21 @@ Neither spec is authored by this repo. Both are E2E's own published documents;
 this repo's job is turning them into buildable Go code and keeping that
 reproducible as E2E updates them.
 
+## Releasing
+
+Go has no version field in `go.mod` -- module versions come from git tags,
+and since this is a multi-module repo (no root module, 34 independent
+`go.mod` files), each module needs its own `<module-path>/vX.Y.Z` tag for
+`go get` to resolve it, alongside one bare `vX.Y.Z` tag for the GitHub
+Release page itself.
+
+Don't tag by hand. Run the **Release** workflow (Actions tab -> Release ->
+Run workflow, or `gh workflow run release.yml -f version=0.2.0`) with a
+MAJOR.MINOR.PATCH version. It builds and verifies every module
+(`make all`), tags all 34 modules plus the bare tag, pushes them, and
+creates the GitHub Release with notes generated from commits since the
+last release.
+
 ## Layout
 
 ```

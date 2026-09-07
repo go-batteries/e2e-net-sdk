@@ -1,0 +1,111 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release, semver without the leading v (e.g. 0.2.0)"
+        required: true
+      force:
+        description: "Overwrite an existing version's tags/release (only for a deliberate manual re-deploy)"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.24"
+
+      - name: Validate version format and check for an existing release
+        run: |
+          v="${{ github.event.inputs.version }}"
+          force="${{ github.event.inputs.force }}"
+          if [[ ! "$v" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "version must be MAJOR.MINOR.PATCH (e.g. 0.2.0), got: $v"
+            exit 1
+          fi
+          if [ "$force" != "true" ]; then
+            if git ls-remote --tags origin "refs/tags/v$v" | grep -q .; then
+              echo "v$v already exists on origin. This workflow only creates new"
+              echo "versions by default -- re-run with force=true to overwrite an"
+              echo "existing release, and only do that for a deliberate manual"
+              echo "re-deploy, not a routine release."
+              exit 1
+            fi
+          else
+            echo "force=true: will overwrite v$v and every myaccount/*/v$v, tir/*/v$v tag if present"
+          fi
+
+      - name: Build and verify every module
+        run: |
+          export PATH="$HOME/.local/go/bin:$HOME/go/bin:$PATH"
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+          make all
+
+      - name: Tag every module and push
+        run: |
+          v="${{ github.event.inputs.version }}"
+          force="${{ github.event.inputs.force }}"
+          tagflag="-a -m release"
+          [ "$force" = "true" ] && tagflag="$tagflag -f"
+
+          git tag $tagflag "v$v"
+          for m in myaccount/* tir/*; do
+            [ -d "$m" ] || continue
+            git tag $tagflag "$m/v$v"
+          done
+
+          if [ "$force" = "true" ]; then
+            git push origin --tags --force
+          else
+            git push origin --tags
+          fi
+
+      - name: Generate release notes from commits since last tag
+        id: notes
+        run: |
+          v="${{ github.event.inputs.version }}"
+          prev=$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | grep -v "^v$v\$" | head -1)
+          {
+            echo "notes<<EOF"
+            echo "## Install"
+            echo ""
+            echo '```'
+            echo "go get github.com/go-batteries/e2e-net-sdk/myaccount/ec2@v$v"
+            echo "go get github.com/go-batteries/e2e-net-sdk/tir/models@v$v"
+            echo '```'
+            echo ""
+            echo "See the README for the full module list."
+            echo ""
+            echo "## Changes"
+            if [ -n "$prev" ]; then
+              git log "$prev"..HEAD --pretty="- %s" --no-merges
+            else
+              git log --pretty="- %s" --no-merges
+            fi
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          v="${{ github.event.inputs.version }}"
+          force="${{ github.event.inputs.force }}"
+          if [ "$force" = "true" ]; then
+            gh release delete "v$v" --yes --cleanup-tag=false 2>/dev/null || true
+          fi
+          gh release create "v$v" \
+            --title "v$v" \
+            --notes "${{ steps.notes.outputs.notes }}"
