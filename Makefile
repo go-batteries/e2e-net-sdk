@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 export PATH := $(HOME)/.local/go/bin:$(HOME)/go/bin:$(PATH)
 
-MODULES := $(shell find myaccount tir -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
+MODULES := $(shell find myaccount tir -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort) $(shell find example -mindepth 1 -maxdepth 1 -type d 2>/dev/null)
 
 .PHONY: all
 all: fmt vet lint build

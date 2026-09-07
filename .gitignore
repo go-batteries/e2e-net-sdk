@@ -1,3 +1,6 @@
 *.log
 scripts/__pycache__/
 scripts/*.pyc
+example/*/lifecycle
+example/*/main
+!example/*/main.go
