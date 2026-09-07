@@ -79,6 +79,21 @@ Pipeline, per API:
 4. `gofmt`, `go build`, `go vet` run on each module; the script stops at the
    first failure.
 
+**Finding new bugs without creating any resources:** `scripts/find_bugs.py`
+calls every safe (no-path-param) GET list endpoint against your live
+account, diffs the JSON against the fixed spec's declared types, and
+auto-appends properly-formed entries to `scripts/patches/myaccount.json`
+for anything that doesn't match -- the same process used by hand to find
+the bugs already patched, now scripted:
+
+```
+E2E_API_KEY=... E2E_AUTH_TOKEN=... E2E_PROJECT_ID=58489 python3 scripts/find_bugs.py --dry-run
+```
+
+Drop `--dry-run` to actually write the new entries, then review the diff
+in `scripts/patches/myaccount.json` before running `scripts/generate.sh`.
+GET-only, creates nothing, costs nothing.
+
 Re-running is safe: `go.mod` is only written the first time a module directory
 appears, never touched again, and only `client.gen.go` / `openapi.json` are
 regenerated.
